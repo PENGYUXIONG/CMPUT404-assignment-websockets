@@ -109,7 +109,9 @@ def read_ws(ws,client):
                 break
     except:
         pass
-
+# Copyright by Abram hindle
+# https://github.com/abramhindle/WebSocketsExamples/blob/master/chat.py
+# copied from the function hellp ,read_ws and subscribe_socket
 @sockets.route('/subscribe')
 def subscribe_socket(ws):
     '''Fufill the websocket URL of /subscribe, every update notify the
@@ -145,24 +147,35 @@ def flask_post_json():
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
     '''update the entities via this interface'''
-    return None
+    # Copyright from Abram Hindle
+    # https://github.com/uofa-cmput404/cmput404-slides/blob/master/examples/ObserverExampleAJAX/server.py
+    v = flask_post_json()
+    myWorld.set(entity, v)
+    e = myWorld.get(entity)
+    return flask.jsonify(e)
 
+# # Copyright from Abram Hindle
+# https://github.com/uofa-cmput404/cmput404-slides/blob/master/examples/ObserverExampleAJAX/server.py
+# https://github.com/KaixiangCS/CMPUT404-assignment-ajax/blob/master/server.py
 @app.route("/world", methods=['POST','GET'])    
 def world():
     '''you should probably return the world here'''
-    return None
+    v = myWorld.world()
+    return flask.jsonify(v)
 
 @app.route("/entity/<entity>")    
 def get_entity(entity):
     '''This is the GET version of the entity interface, return a representation of the entity'''
-    return None
+    e = myWorld.get(entity)
+    return flask.jsonify(e)
 
 
 @app.route("/clear", methods=['POST','GET'])
 def clear():
     '''Clear the world out!'''
-    return None
-
+    myWorld.clear()
+    v = myWorld.world()
+    return flask.jsonify( v )
 
 
 if __name__ == "__main__":
